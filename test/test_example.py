@@ -4,4 +4,4 @@ def test_it_works():
     assert 1 == 1
 
 def test_another():
-    assert 1 == 0
+    assert 1 == 2
