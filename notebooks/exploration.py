@@ -21,7 +21,8 @@ df_clean.display()
 
 # COMMAND ----------
 
-import pyspark.testing
-from pyspark.testing.utils import assertDataFrameEqual
+df_clean.select("id", F.col("cleansed_name").alias("name")).write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("tim_dikland.sse.example_data_cleansed")
 
-assertDataFrameEqual(df_raw.select(F.col("value").alias("name")), df_clean.select(F.col("cleansed_name").alias("name")))
+# COMMAND ----------
+
+
