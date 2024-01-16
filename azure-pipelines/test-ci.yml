@@ -12,7 +12,6 @@ jobs:
     # Trigger unit test upon making a PR against the main branch
     condition: |
       and(
-        not(eq(variables['Build.Reason'], 'IndividualCI')),
         eq(variables['Build.Reason'], 'PullRequest'),
         eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main')
       )
