@@ -1,0 +1,68 @@
+trigger:
+  branches:
+    include:
+      - main
+      - feat/*
+
+variables:
+  - group: databricks-connection
+
+jobs:
+  - job: UnitTests
+    displayName: "Unit Tests"
+    pool:
+      vmImage: "ubuntu-latest"
+
+    steps:
+      - script: env | sort
+        displayName: "Environment / Context"
+
+      - checkout: self
+        persistCredentials: true
+        clean: true
+        displayName: "Checkout & Build.Reason: $(Build.Reason) & Build.SourceBranchName: $(Build.SourceBranchName)"
+
+      - task: UsePythonVersion@0
+        displayName: "Use Python 3.8"
+        inputs:
+          versionSpec: 3.8
+
+      - script: |
+          python -m pip install --upgrade pip
+          pip install -r test-requirements.txt
+          pip install -r requirements.txt
+        displayName: "Install dependencies"
+
+      - script: |
+          pytest --junitxml=test-unit.xml
+        displayName: "Run unit tests with pytest"
+
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: "JUnit"
+          testResultsFiles: "**/test-*.xml"
+          failTaskOnFailedTests: true
+
+  - job: IntegrationTests
+    displayName: "Integration Tests"
+    dependsOn: UnitTests
+    condition: succeeded()
+    pool:
+      vmImage: "ubuntu-latest"
+
+    steps:
+      - checkout: self
+        persistCredentials: true
+        clean: true
+        displayName: "Checkout & Build.Reason: $(Build.Reason) & Build.SourceBranchName: $(Build.SourceBranchName)"
+
+      # Install Databricks CLI
+      - script: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.211.0/install.sh | sh
+        displayName: "Install Databricks CLI"
+
+      # Extract Databricks version to test installation
+      - script: |
+          databricks version
+        displayName: "Get Databricks CLI version"
