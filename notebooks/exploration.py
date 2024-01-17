@@ -13,6 +13,11 @@
 
 # COMMAND ----------
 
+import sys
+sys.path.append("..")
+
+# COMMAND ----------
+
 from src.transform import cleanse_name_column
 
 df_raw = spark.read.table("tim_dikland.sse.example_data")

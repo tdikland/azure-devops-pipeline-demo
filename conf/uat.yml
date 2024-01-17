@@ -1,0 +1,13 @@
+targets:
+  uat:
+    resources:
+      jobs:
+        devops_example_job:
+          job_clusters:
+            - job_cluster_key: job_cluster
+              new_cluster:
+                spark_version: 14.2.x-scala2.12
+                node_type_id: Standard_DS3_v2
+                autoscale:
+                  min_workers: 2
+                  max_workers: 8
