@@ -13,15 +13,15 @@
 
 # COMMAND ----------
 
-import pyspark.sql.functions as F
+from src.transform import cleanse_name_column
 
 df_raw = spark.read.table("tim_dikland.sse.example_data")
-df_clean = df_raw.withColumn("cleansed_name", F.trim("value"))
+df_clean = df_raw.transform(cleanse_name_column)
 df_clean.display()
 
 # COMMAND ----------
 
-df_clean.select("id", F.col("cleansed_name").alias("name")).write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("tim_dikland.sse.example_data_cleansed")
+df_clean.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("tim_dikland.sse.example_data_cleansed")
 
 # COMMAND ----------
 

@@ -1,1 +1,4 @@
 pytest
+pyspark
+pandas
+pyarrow
