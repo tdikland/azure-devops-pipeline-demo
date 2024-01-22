@@ -1,3 +1,12 @@
+resources:
+  jobs:
+    integration_test:
+      name: integration_test_devops_pipeline
+      tasks:
+        - task_key: test
+          run_job_task:
+            job_id: 995363745037032
+
 targets:
   test:
     resources:
