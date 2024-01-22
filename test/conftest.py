@@ -1,7 +1,6 @@
 import pytest
 
 from pyspark.sql import SparkSession
-from databricks.connect import DatabricksSession
 
 import os
 
@@ -16,5 +15,5 @@ os.environ["PYARROW_IGNORE_TIMEZONE"] = "1"
 
 @pytest.fixture
 def spark_fixture():
-    spark = DatabricksSession.builder.getOrCreate()
+    spark = SparkSession.builder.getOrCreate()
     yield spark
